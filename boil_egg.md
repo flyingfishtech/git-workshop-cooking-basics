@@ -1,7 +1,7 @@
 # How to Boil an Egg
 
 **Ingredients:**  
-- Eggs  
+- Eggs
 - Water  
 - Ice (for cooling)  
 
