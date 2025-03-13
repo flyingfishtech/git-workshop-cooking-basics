@@ -1,0 +1,45 @@
+name: Cookbook_maker
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  spell_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install aspell
+        run: sudo apt-get install -y aspell aspell-en
+
+      - name: Run spell check
+        run: |
+          if cat *.md | aspell list --lang=en | grep .; then
+            echo "Spelling errors found!"
+            cat *.md | aspell list --lang=en
+            exit 1
+          else
+            echo "No spelling errors found."
+          fi
+  
+
+  compile_cookbook:
+    runs-on:  ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install pandoc
+        run: sudo apt-get install -y pandoc
+
+      - name: Compile Cookbook
+        run:  |
+          pandoc -o cookbook.html *
+      
+      - name: Publish cookbook
+        uses: actions/upload-artifact@v4
+        with:
+            name: Cookbook
+            path: cookbook.html
